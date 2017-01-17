@@ -40,11 +40,16 @@ def get_host_from_url(url):
     return (host, '/' + url)
 
 
-def fetch_data(uri):
+def fetch_data(uri, body):
     if 'http' not in uri:
         uri = 'http://' + uri
     s = requests.Session()
-    d = s.get(uri)
+    if body:
+        import urlparse
+        body_d = dict(urlparse.parse_qsl(urlparse.urlsplit(body).path))
+        d = s.post(uri, data=body_d)
+    else:
+        d = s.get(uri)
     return {
         'code': d.status_code,
         'text': d.text,
@@ -74,7 +79,7 @@ def curl(mode, addr_and_port, url, body):
     host, uri = get_host_from_url(url)
     path, _, qs = uri.partition('?')
     if mode == 'http':
-        return fetch_data(addr_and_port+uri)
+        return fetch_data(addr_and_port+uri, body)
     elif mode == 'tcp':
         host = host or parse_addr(addr_and_port)[0]
     else:
