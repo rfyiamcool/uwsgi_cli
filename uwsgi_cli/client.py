@@ -70,7 +70,7 @@ def ask_uwsgi(addr_and_port, mode, var, body=''):
     return b''.join(response).decode('utf8')
 
 
-def curl(mode, addr_and_port, url):
+def curl(mode, addr_and_port, url, body):
     host, uri = get_host_from_url(url)
     path, _, qs = uri.partition('?')
     if mode == 'http':
@@ -88,7 +88,11 @@ def curl(mode, addr_and_port, url):
         'SERVER_NAME': host,
         'HTTP_HOST': host,
     }
-    return ask_uwsgi(addr_and_port, mode, var)
+    if body:#
+        var['REQUEST_METHOD'] = 'POST'
+        var['HTTP_CONTENT_LENGTH'] = str(len(body))
+        var['HTTP_CONTENT_TYPE'] = 'application/x-www-form-urlencoded'
+    return ask_uwsgi(addr_and_port, mode, var, body=body)
 
 
 def cli(*args):
@@ -103,8 +107,11 @@ def cli(*args):
     parser.add_argument('url', nargs='?', default='/',
                         help='Request URI optionally containing hostname')
 
+    parser.add_argument('body', nargs='?', default='',
+                        help='Post body params')
+
     args = parser.parse_args(args or sys.argv[1:])
-    print curl(args.mode, args.uwsgi_addr, args.url)
+    print curl(args.mode, args.uwsgi_addr, args.url, args.body)
 
 
 if __name__ == '__main__':

@@ -1,6 +1,6 @@
 # uwsgi_cli
 
-*暂时只支持GET, 后期会扩充POST方法*
+### support http get、post methods
 
 ## install
 ```
@@ -28,4 +28,8 @@ uwsgi_cli unix /tmp/xiaorui.sock /
 ### tcp socket mode
 ```
 uwsgi_cli tcp 127.0.0.1:5000 /mp/article
+```
+### post
+```
+uwsgi_cli tcp 127.0.0.1:5000 /cool/fetch "url=xiaorui.cc&name=fengyun"
 ```
