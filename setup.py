@@ -11,7 +11,7 @@ def read(fname):
 
 setup(
     name='uwsgi_cli',
-    version='1.0',
+    version='1.1',
     description='a simple uwsgi client',
     long_description=open('README.md').read(),
     keywords=["uwsgi", "fengyun", "ruifengyun"],
