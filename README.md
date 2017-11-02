@@ -1,6 +1,10 @@
 # uwsgi_cli
 
-### support http get、post methods
+match uwsgi protocol, support http get、post requests uwsgi server.
+
+`to do list:`
+
+* add debug mode, print uwsgi body
 
 ## install
 ```
